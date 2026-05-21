@@ -18,12 +18,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         router.push('/login');
       } else {
+        setUserEmail(session.user?.email || 'User');
         setLoading(false);
       }
     });
@@ -44,55 +46,72 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-950 flex items-center justify-center">
+        <div className="glass-lg p-8">
+          <div className="flex items-center gap-3 justify-center">
+            <div className="w-5 h-5 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full animate-spin"></div>
+            <span className="text-slate-200 font-medium">Loading...</span>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-slate-800 border-r border-slate-700 flex flex-col">
-        <div className="p-6 border-b border-slate-700">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-950 flex">
+      {/* Professional Glassmorphism Sidebar */}
+      <aside className="w-72 glass-lg border-r border-slate-600/30 flex flex-col backdrop-blur-2xl fixed h-screen">
+        {/* Logo Section */}
+        <div className="p-6 border-b border-slate-600/20">
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl opacity-20 blur-lg"></div>
+              <div className="relative glass-sm w-14 h-14 flex items-center justify-center">
+                <svg className="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
             </div>
             <div>
-              <h1 className="text-lg font-bold text-white">OceanMind</h1>
-              <p className="text-xs text-slate-400">Marine Operations</p>
+              <h1 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200">
+                OceanMind
+              </h1>
+              <p className="text-xs text-slate-400">Enterprise Platform</p>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        {/* Navigation Menu */}
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
                 pathname === item.href
-                  ? 'bg-blue-600 text-white'
-                  : 'text-slate-300 hover:bg-slate-700 hover:text-white'
+                  ? 'glass-accent bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-200 shadow-lg shadow-cyan-500/10'
+                  : 'text-slate-300 hover:glass-accent hover:text-blue-200'
               }`}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
               </svg>
-              {item.label}
+              <span>{item.label}</span>
             </Link>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-700">
+        {/* User Profile & Logout */}
+        <div className="p-4 border-t border-slate-600/20 space-y-3">
+          <div className="glass-sm px-4 py-3 rounded-xl">
+            <p className="text-xs text-slate-400 mb-1">Logged in as</p>
+            <p className="text-sm text-slate-100 font-medium truncate">{userEmail}</p>
+          </div>
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
+            className="w-full glass-btn group flex items-center justify-center gap-2 bg-gradient-to-r from-red-500/10 to-rose-500/10 hover:from-red-500/20 hover:to-rose-500/20 text-red-300 hover:text-red-200 transition-all duration-300"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             Sign Out
@@ -100,9 +119,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        {children}
+      {/* Main Content Area */}
+      <main className="flex-1 ml-72 overflow-auto">
+        <div className="min-h-screen p-8">
+          {children}
+        </div>
       </main>
     </div>
   );
