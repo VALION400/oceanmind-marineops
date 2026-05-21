@@ -91,9 +91,17 @@ html, body {
 
 /* Interactive Elements */
 .glass-btn {
-  @apply glass py-2.5 px-6 text-sm font-semibold transition-all duration-300;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
   color: var(--text-primary);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: var(--glass-light);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
 }
 
 .glass-btn:hover {
@@ -103,10 +111,17 @@ html, body {
 }
 
 .glass-input {
-  @apply glass py-3 px-4 text-sm w-full;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  width: 100%;
   color: var(--text-primary);
   background: rgba(148, 163, 184, 0.05);
   transition: all 0.3s ease;
+  background: var(--glass-light);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
 }
 
 .glass-input::placeholder {
